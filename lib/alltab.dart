@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_flutter/model/station.dart';
+import 'utils/colors.dart';
 
 class AllTab extends StatelessWidget {
 
@@ -18,7 +19,7 @@ Widget _buildProductItem(BuildContext context, int index) {
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         leading: Container(
           padding: EdgeInsets.only(right: 12.0),
-          child: CircleAvatar(backgroundColor: Colors.green),
+          child: CircleAvatar(backgroundColor: colorSelector(data[index].statusType)),
         ),
         title: Text(
           data[index].stationName,
@@ -31,8 +32,9 @@ Widget _buildProductItem(BuildContext context, int index) {
         ),
         trailing: Column(
           children: <Widget>[
-            Text(data[index].ocuppiedSpots.toString(), style: TextStyle(color: Colors.black)),
-            Text(data[index].emptySpots.toString(), style: TextStyle(color: Colors.black))
+            Icon(Icons.map),
+            Text("Bikes " + data[index].ocuppiedSpots.toString(), style: TextStyle(color: Colors.black)),
+            Text("Parking" + data[index].emptySpots.toString(), style: TextStyle(color: Colors.black))
           ]),
       ),
       ),
@@ -45,6 +47,20 @@ Widget _buildProductItem(BuildContext context, int index) {
       itemBuilder: _buildProductItem,
       itemCount: data.length,
     );
+  }
+
+
+  Color colorSelector(StatusType s){
+    switch(s){
+      case StatusType.ONLINE:
+      return ColorUtils.colorActive;
+      case StatusType.OFFLINE:
+      return Colors.grey;
+      case StatusType.Subpopulated:
+      return Colors.blue;
+      case StatusType.Suprapopulated:
+      return Colors.red;
+    }
   }
 
 }

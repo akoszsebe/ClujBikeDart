@@ -59,6 +59,12 @@ class MyAppState extends State<MyApp> {
               MappTab(),
             ],
           ),
+          floatingActionButton: new FloatingActionButton(
+              elevation: 0.0,
+              child: new Icon(Icons.search, color: Colors.white),
+              backgroundColor: ColorUtils.colorPrimary,
+              onPressed: (){}
+            )
         ),
       ),
     );

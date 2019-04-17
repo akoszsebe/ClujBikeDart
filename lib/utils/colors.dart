@@ -12,5 +12,5 @@ static const Color colorPrimaryText = Color(0XFF727272);
 static const Color colorDivider = Color(0XFF63a4ff);
 static const Color navigationBarColor = Color(0XFF000000);
 static const Color colorTexcolorActivated_colortIcon = Color(0XFFE8E8E8);
-
+static const Color colorActive = Color(0XFF1cbb9b);
 }
