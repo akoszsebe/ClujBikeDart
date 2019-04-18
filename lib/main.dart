@@ -73,7 +73,7 @@ class MyAppState extends State<MyApp> {
             body: TabBarView(
               children: [
                 AllTab(data),
-                FavoritesTab(),
+                FavoritesTab(data),
                 MappTab(),
               ],
             ),
