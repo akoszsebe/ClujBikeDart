@@ -109,13 +109,13 @@ final statusValues = new EnumValues({
     "Functionala": Status.FUNCTIONALA
 });
 
-enum StatusType { ONLINE, OFFLINE, Subpopulated, Suprapopulated }
+enum StatusType { ONLINE, OFFLINE, SUBPOPULATED, SUPRAPOPULATED }
 
 final statusTypeValues = new EnumValues({
     "Offline": StatusType.OFFLINE,
     "Online": StatusType.ONLINE,
-    "Subpopulated":StatusType.Subpopulated,
-    "Suprapopulated":StatusType.Suprapopulated
+    "Subpopulated":StatusType.SUBPOPULATED,
+    "Suprapopulated":StatusType.SUPRAPOPULATED
 });
 
 class EnumValues<T> {

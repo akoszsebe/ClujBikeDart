@@ -3,64 +3,84 @@ import 'package:hello_flutter/model/station.dart';
 import 'utils/colors.dart';
 
 class AllTab extends StatelessWidget {
-
   AllTab(List<Station> _data) {
     data = _data;
   }
 
-List<Station> data;
+  List<Station> data;
 
-Widget _buildProductItem(BuildContext context, int index) {
-    return Card(
-      margin: new EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-      child: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        leading: Container(
-          padding: EdgeInsets.only(right: 12.0),
-          child: CircleAvatar(backgroundColor: colorSelector(data[index].statusType)),
-        ),
-        title: Text(
-          data[index].stationName,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Row(
-          children: <Widget>[
-            Text(data[index].address, style: TextStyle(color: Colors.black))
-          ],
-        ),
-        trailing: Column(
-          children: <Widget>[
-            Icon(Icons.map),
-            Text("Bikes " + data[index].ocuppiedSpots.toString(), style: TextStyle(color: Colors.black)),
-            Text("Parking" + data[index].emptySpots.toString(), style: TextStyle(color: Colors.black))
-          ]),
-      ),
-      ),
-    );
+  Widget _buildListItem(BuildContext context, int index) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircleAvatar(
+                        backgroundColor: colorSelector(data[index].statusType),
+                        radius: 13.0),
+                  ),
+                  Text(
+                    data[index].stationName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 23.0),
+                    maxLines: 2,
+                  ),
+                ],
+              ),
+              Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  width: 230,
+                  child: Text(
+                    data[index].address,
+                    style: TextStyle(color: Colors.grey),
+                    maxLines: 2,
+                  ))
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 16.0),
+            height: 70,
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Image.asset("assets/images/map_icon.png",width: 25),
+                  Text("Bikes " + data[index].ocuppiedSpots.toString(),
+                      style: TextStyle(color: Colors.grey), textScaleFactor: 1.1),
+                  Text("Parking" + data[index].emptySpots.toString(),
+                      style: TextStyle(color: Colors.grey),textScaleFactor: 1.1,)
+                ]),
+          ),
+        ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: _buildProductItem,
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(color: Colors.grey),
+      itemBuilder: _buildListItem,
       itemCount: data.length,
     );
   }
 
-
-  Color colorSelector(StatusType s){
-    switch(s){
+  Color colorSelector(StatusType s) {
+    switch (s) {
       case StatusType.ONLINE:
-      return ColorUtils.colorActive;
+        return ColorUtils.colorActive;
       case StatusType.OFFLINE:
-      return Colors.grey;
-      case StatusType.Subpopulated:
-      return Colors.blue;
-      case StatusType.Suprapopulated:
-      return Colors.red;
+        return Colors.grey;
+      case StatusType.SUBPOPULATED:
+        return Colors.blue;
+      case StatusType.SUPRAPOPULATED:
+        return Colors.red;
     }
   }
-
 }

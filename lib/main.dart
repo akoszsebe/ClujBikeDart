@@ -17,18 +17,23 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-
- List<Station> data = [];
-
+  List<Station> data = [];
+  Choice _selectedChoice = choices[0];
   @override
-  void initState(){
-    createPost("http://portal.clujbike.eu/Station/Read").then((response){
+  void initState() {
+    createPost("http://portal.clujbike.eu/Station/Read").then((response) {
       setState(() {
-       data = response; 
+        data = response;
       });
     });
   }
 
+  void _select(Choice choice) {
+    // Causes the app to rebuild with the new _selectedChoice.
+    setState(() {
+      _selectedChoice = choice;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,31 +47,54 @@ class MyAppState extends State<MyApp> {
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(text: "All"),
-                Tab(text: "Favorites"),
-                Tab(text: "Mapp"),
+            appBar: AppBar(
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: "All"),
+                  Tab(text: "Favorites"),
+                  Tab(text: "Mapp"),
+                ],
+              ),
+              title: Text('ClujBikeDart'),
+              actions: <Widget>[
+                PopupMenuButton<Choice>(
+                  onSelected: _select,
+                  itemBuilder: (BuildContext context) {
+                    return choices.map((Choice choice) {
+                      return PopupMenuItem<Choice>(
+                        value: choice,
+                        child: Text(choice.title),
+                      );
+                    }).toList();
+                  },
+                ),
               ],
             ),
-            title: Text('ClujBikeDart'),
-          ),
-          body: TabBarView(
-            children: [
-              AllTab(data),
-              FavoritesTab(),
-              MappTab(),
-            ],
-          ),
-          floatingActionButton: new FloatingActionButton(
-              elevation: 0.0,
-              child: new Icon(Icons.search, color: Colors.white),
-              backgroundColor: ColorUtils.colorPrimary,
-              onPressed: (){}
-            )
-        ),
+            body: TabBarView(
+              children: [
+                AllTab(data),
+                FavoritesTab(),
+                MappTab(),
+              ],
+            ),
+            floatingActionButton: new FloatingActionButton(
+                elevation: 0.0,
+                child: new Icon(Icons.search, color: Colors.white),
+                backgroundColor: ColorUtils.colorPrimary,
+                onPressed: () {})),
       ),
     );
   }
 }
+
+class Choice {
+  const Choice({this.title, this.icon});
+
+  final String title;
+  final IconData icon;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Info/Settings', icon: Icons.settings)
+];
+
