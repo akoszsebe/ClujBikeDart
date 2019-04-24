@@ -10,6 +10,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="hello_flutter"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyA_GNyXTy9MSp0UHhiSvC8sKpaS4xAszxA" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -28,6 +32,8 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+             
         </activity>
     </application>
 </manifest>

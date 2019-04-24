@@ -26,14 +26,17 @@ Widget _buildListItem(BuildContext context, int index) {
                         backgroundColor: colorSelector(data[index].statusType),
                         radius: 13.0),
                   ),
-                  Text(
-                    data[index].stationName,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 23.0),
-                    maxLines: 2,
-                  ),
+                  Container(
+                    width: 200,
+                    child: Text(
+                      data[index].stationName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 23.0),
+                      maxLines: 2,
+                    )
+                  )
                 ],
               ),
               Container(

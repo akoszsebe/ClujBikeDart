@@ -48,7 +48,9 @@ class MyAppState extends State<MyApp> {
         length: 3,
         child: Scaffold(
             appBar: AppBar(
+              textTheme: TextTheme(title: TextStyle(fontSize: 22)),
               bottom: TabBar(
+                labelStyle: TextStyle(fontSize: 18),
                 tabs: [
                   Tab(text: "All"),
                   Tab(text: "Favorites"),
@@ -71,10 +73,11 @@ class MyAppState extends State<MyApp> {
               ],
             ),
             body: TabBarView(
+              physics: ScrollPhysics(),
               children: [
                 AllTab(data),
                 FavoritesTab(data),
-                MappTab(),
+                MappTab(data),
               ],
             ),
             floatingActionButton: new FloatingActionButton(
