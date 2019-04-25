@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'utils/colors.dart';
 import 'package:hello_flutter/alltab.dart';
 import 'package:hello_flutter/info.dart';
+import 'package:hello_flutter/stationinfo.dart';
 import 'package:hello_flutter/favoritesTab.dart';
 import 'package:hello_flutter/maptab.dart';
 import 'package:hello_flutter/model/station.dart';
@@ -79,7 +80,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       return <PopupMenuEntry>[
                         new PopupMenuItem(child: InkWell(
                           child: new Text("Info/Settings"),
-                          onTap: () => { Navigator.popAndPushNamed(context,'/info') },
+                          onTap: () => { Navigator.popAndPushNamed(context,Info.routeName) },
                         ),)
                       ];
                   },
@@ -103,7 +104,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     onPressed: () {})),
           )),
       routes: <String, WidgetBuilder>{
-        '/info': (BuildContext context) => new Info(),
+        Info.routeName: (BuildContext context) => Info(),
+        StationInfo.routeName: (BuildContext context) => StationInfo(),
       },
     );
   }
