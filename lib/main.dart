@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'utils/colors.dart';
 import 'package:hello_flutter/alltab.dart';
+import 'package:hello_flutter/info.dart';
 import 'package:hello_flutter/favoritesTab.dart';
 import 'package:hello_flutter/maptab.dart';
 import 'package:hello_flutter/model/station.dart';
@@ -16,23 +17,40 @@ class MyApp extends StatefulWidget {
 
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Station> data = [];
-  Choice _selectedChoice = choices[0];
+  bool isVisible = true;
+  bool isRefreshing = true;
+  TabController _tabController;
+
+  final List<Tab> myTabs = <Tab>[
+    Tab(text: "All"),
+    Tab(text: "Favorites"),
+    Tab(text: "Map"),
+  ];
+
   @override
   void initState() {
+    getData();
+    _tabController =
+        new TabController(vsync: this, initialIndex: 0, length: myTabs.length);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void getData(){
+    isRefreshing = true;
     createPost("http://portal.clujbike.eu/Station/Read").then((response) {
       setState(() {
         data = response;
+        isRefreshing = false;
       });
     });
   }
 
-  void _select(Choice choice) {
-    // Causes the app to rebuild with the new _selectedChoice.
-    setState(() {
-      _selectedChoice = choice;
-    });
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,59 +63,59 @@ class MyAppState extends State<MyApp> {
           accentColor: ColorUtils.colorAccent,
           dividerColor: ColorUtils.colorDivider),
       home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
+          length: 3,
+          child: Scaffold(
             appBar: AppBar(
               textTheme: TextTheme(title: TextStyle(fontSize: 22)),
               bottom: TabBar(
+                controller: _tabController,
                 labelStyle: TextStyle(fontSize: 18),
-                tabs: [
-                  Tab(text: "All"),
-                  Tab(text: "Favorites"),
-                  Tab(text: "Mapp"),
-                ],
+                tabs: myTabs,
               ),
               title: Text('ClujBikeDart'),
               actions: <Widget>[
-                PopupMenuButton<Choice>(
-                  onSelected: _select,
+                PopupMenuButton(
                   itemBuilder: (BuildContext context) {
-                    return choices.map((Choice choice) {
-                      return PopupMenuItem<Choice>(
-                        value: choice,
-                        child: Text(choice.title),
-                      );
-                    }).toList();
+                      return <PopupMenuEntry>[
+                        new PopupMenuItem(child: InkWell(
+                          child: new Text("Info/Settings"),
+                          onTap: () => { Navigator.popAndPushNamed(context,'/info') },
+                        ),)
+                      ];
                   },
                 ),
               ],
             ),
             body: TabBarView(
-              physics: ScrollPhysics(),
-              children: [
-                AllTab(data),
-                FavoritesTab(data),
-                MappTab(data),
-              ],
-            ),
-            floatingActionButton: new FloatingActionButton(
-                elevation: 0.0,
-                child: new Icon(Icons.search, color: Colors.white),
-                backgroundColor: ColorUtils.colorPrimary,
-                onPressed: () {})),
-      ),
+                physics: ScrollPhysics(),
+                children: [
+                  AllTab(data,this),
+                  FavoritesTab(data,this),
+                  MappTab(data),
+                ],
+                controller: _tabController),
+            floatingActionButton: Visibility(
+                visible: isVisible,
+                child: new FloatingActionButton(
+                    elevation: 0.0,
+                    child: new Icon(Icons.search, color: Colors.white),
+                    backgroundColor: ColorUtils.colorPrimary,
+                    onPressed: () {})),
+          )),
+      routes: <String, WidgetBuilder>{
+        '/info': (BuildContext context) => new Info(),
+      },
     );
   }
+
+  void _handleTabSelection() {
+    setState(() {
+      if (_tabController.index == 2) {
+        isVisible = false;
+      } else {
+        isVisible = true;
+      }
+    });
+  }
 }
-
-class Choice {
-  const Choice({this.title, this.icon});
-
-  final String title;
-  final IconData icon;
-}
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Info/Settings', icon: Icons.settings)
-];
 
