@@ -61,7 +61,7 @@ class MappTabState extends State<MappTab>{
               element.latitude,
               element.longitude,
             ),
-            infoWindow: InfoWindow(title: element.stationName, snippet: '*')
+            infoWindow: InfoWindow(title: element.stationName, snippet: element.address)
             );
             markers[markerId] = marker;
           })  

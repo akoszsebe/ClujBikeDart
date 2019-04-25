@@ -5,9 +5,9 @@ import 'package:hello_flutter/main.dart';
 
 
 class FavoritesTab extends BaseTab {
-  FavoritesTab(List<Station> _data, MyAppState myAppState) :super(filter([85,86,98],_data),myAppState);
+  FavoritesTab(List<Station> _data,List<String> ids, MyAppState myAppState) :super(filter(ids,_data),myAppState);
 
-  static List<Station> filter(List<int> ids,List<Station> stations){
-    return stations.where((x) => ids.contains(x.id)).toList();
+  static List<Station> filter(List<String> ids,List<Station> stations){
+    return stations.where((x) => ids.contains(x.id.toString())).toList();
   }
 }

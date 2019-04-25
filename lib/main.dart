@@ -6,6 +6,7 @@ import 'package:hello_flutter/stationinfo.dart';
 import 'package:hello_flutter/favoritesTab.dart';
 import 'package:hello_flutter/maptab.dart';
 import 'package:hello_flutter/model/station.dart';
+import 'package:hello_flutter/utils/localdb.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,6 +21,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Station> data = [];
+  List<String> favoriteIds = [];
   bool isVisible = true;
   bool isRefreshing = true;
   TabController _tabController;
@@ -38,12 +40,15 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     _tabController.addListener(_handleTabSelection);
   }
 
-  void getData(){
+  void getData() {
     isRefreshing = true;
     createPost("http://portal.clujbike.eu/Station/Read").then((response) {
-      setState(() {
-        data = response;
-        isRefreshing = false;
+      LocalDb.getFavoriteIds().then((ids) {
+        setState(() {
+          favoriteIds = ids;
+          data = response;
+          isRefreshing = false;
+        });
       });
     });
   }
@@ -77,12 +82,17 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               actions: <Widget>[
                 PopupMenuButton(
                   itemBuilder: (BuildContext context) {
-                      return <PopupMenuEntry>[
-                        new PopupMenuItem(child: InkWell(
+                    return <PopupMenuEntry>[
+                      new PopupMenuItem(
+                        child: InkWell(
                           child: new Text("Info/Settings"),
-                          onTap: () => { Navigator.popAndPushNamed(context,Info.routeName) },
-                        ),)
-                      ];
+                          onTap: () => {
+                                Navigator.popAndPushNamed(
+                                    context, Info.routeName)
+                              },
+                        ),
+                      )
+                    ];
                   },
                 ),
               ],
@@ -90,8 +100,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             body: TabBarView(
                 physics: ScrollPhysics(),
                 children: [
-                  AllTab(data,this),
-                  FavoritesTab(data,this),
+                  AllTab(data, this),
+                  FavoritesTab(data,favoriteIds, this),
                   MappTab(data),
                 ],
                 controller: _tabController),
@@ -120,4 +130,3 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     });
   }
 }
-

@@ -70,7 +70,7 @@ class BaseTab extends StatelessWidget {
                           style: TextStyle(color: Colors.grey),
                           textScaleFactor: 1.1),
                       Text(
-                        "Parking" + data[index].emptySpots.toString(),
+                        "Parking " + data[index].emptySpots.toString(),
                         style: TextStyle(color: Colors.grey),
                         textScaleFactor: 1.1,
                       )
