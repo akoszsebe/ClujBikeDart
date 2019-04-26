@@ -15,7 +15,7 @@ class BaseTab extends StatelessWidget {
   List<Station> data;
 
   Widget _buildListItem(BuildContext context, int index) {
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           Navigator.pushNamed(context, StationInfo.routeName,
               arguments: data[index]);
