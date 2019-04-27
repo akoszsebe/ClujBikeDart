@@ -40,7 +40,8 @@ class _MappTabState extends State<MappTab>{
         initialCameraPosition: _kGooglePlex,
         onMapCreated: _onMapCreated,
         gestureRecognizers: Set()
-        ..add(Factory<HorizontalDragGestureRecognizer>(() => HorizontalDragGestureRecognizer())),
+        ..add(Factory<HorizontalDragGestureRecognizer>(() => HorizontalDragGestureRecognizer()))
+        ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
        markers: Set<Marker>.of(markers.values)
       )
     );
