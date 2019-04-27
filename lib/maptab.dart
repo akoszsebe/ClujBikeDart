@@ -5,14 +5,10 @@ import 'package:hello_flutter/model/station.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-
 class MappTab extends StatefulWidget {
-  List<Station> data;
+  final List<Station> data;
 
-  MappTab(List<Station> _data) {
-      data = _data;
-  }
+  MappTab(this.data);
 
   @override
   State<MappTab> createState() => MappTabState(data);

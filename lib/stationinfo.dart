@@ -13,7 +13,7 @@ class StationInfo extends StatefulWidget {
 
 class StationInfoState extends State<StationInfo> {
   Icon favoriteIcon = Icon(
-    Icons.star_border,
+    Icons.favorite_border,
     size: 35,
   );
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
@@ -45,10 +45,10 @@ class StationInfoState extends State<StationInfo> {
                 onPressed: () {
                   setState(() {
                     if (favoriteIcon.icon == Icons.star) {
-                      favoriteIcon = Icon(Icons.star_border, size: 35);
+                      favoriteIcon = Icon(Icons.favorite_border, size: 35);
                       LocalDb.removefavoriteId(station.id.toString());
                     } else {
-                      favoriteIcon = Icon(Icons.star, size: 35);
+                      favoriteIcon = Icon(Icons.favorite, size: 35,);
                       LocalDb.setfavoriteId(station.id.toString());
                     }
                   });
@@ -108,11 +108,11 @@ class StationInfoState extends State<StationInfo> {
       print("resp " + response.toString());
       if (response) {
         setState(() {
-          favoriteIcon = Icon(Icons.star, size: 35);
+          favoriteIcon = Icon(Icons.favorite, size: 35);
         });
       } else {
         setState(() {
-          favoriteIcon = Icon(Icons.star_border, size: 35);
+          favoriteIcon = Icon(Icons.favorite_border, size: 35);
         });
       }
     });

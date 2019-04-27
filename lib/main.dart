@@ -7,6 +7,7 @@ import 'package:hello_flutter/favoritesTab.dart';
 import 'package:hello_flutter/maptab.dart';
 import 'package:hello_flutter/model/station.dart';
 import 'package:hello_flutter/utils/localdb.dart';
+import 'package:hello_flutter/utils/fancyfab.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,15 +16,17 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() {
     return MyAppState();
   }
-  // This widget is the root of your application.
-
 }
 
 class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Station> data = [];
+  List<Station> uiData = [];
   List<String> favoriteIds = [];
   bool isVisible = true;
+  bool isSearchVisible = false;
   bool isRefreshing = true;
+  bool loaded = false;
+  Icon fabIcon = Icon(Icons.search, color: Colors.white);
   TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[
@@ -47,7 +50,9 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         setState(() {
           favoriteIds = ids;
           data = response;
+          uiData = response;
           isRefreshing = false;
+          loaded = true;
         });
       });
     });
@@ -97,21 +102,9 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            body: TabBarView(
-                physics: ScrollPhysics(),
-                children: [
-                  AllTab(data, this),
-                  FavoritesTab(data,favoriteIds, this),
-                  MappTab(data),
-                ],
-                controller: _tabController),
-            floatingActionButton: Visibility(
-                visible: isVisible,
-                child: new FloatingActionButton(
-                    elevation: 0.0,
-                    child: new Icon(Icons.search, color: Colors.white),
-                    backgroundColor: ColorUtils.colorPrimary,
-                    onPressed: () {})),
+            body: _buildBody(),
+            floatingActionButton:
+                Visibility(visible: isVisible, child: _buildFab()),
           )),
       routes: <String, WidgetBuilder>{
         Info.routeName: (BuildContext context) => Info(),
@@ -120,8 +113,52 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     );
   }
 
+  Widget _buildFab() {
+    return new FancyFab((b) => {
+          setState(() {
+            isSearchVisible = b;
+            if (uiData.length != data.length) {
+              uiData = data;
+            }
+          })
+        });
+  }
+
+  Widget _buildBody() {
+    if (loaded) {
+      return TabBarView(
+          physics: ScrollPhysics(),
+          children: [
+            AllTab(uiData, this),
+            FavoritesTab(uiData, favoriteIds, this),
+            MappTab(uiData),
+          ],
+          controller: _tabController);
+    } else {
+      return new Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+  }
+
+  void filterdata(String filter) {
+    setState(() {
+      if (filter.isEmpty) {
+        uiData = data;
+      } else {
+        uiData = data
+            .where((x) =>
+                x.stationName.toLowerCase().contains(filter.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   void _handleTabSelection() {
     setState(() {
+      if (uiData.length != data.length) {
+        uiData = data;
+      }
       if (_tabController.index == 2) {
         isVisible = false;
       } else {

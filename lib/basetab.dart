@@ -5,14 +5,10 @@ import 'package:hello_flutter/main.dart';
 import 'package:hello_flutter/stationinfo.dart';
 
 class BaseTab extends StatelessWidget {
-  MyAppState myAppState;
+  final MyAppState myAppState;
+  final List<Station> data;
 
-  BaseTab(List<Station> _data, MyAppState _myAppState) {
-    data = _data;
-    myAppState = _myAppState;
-  }
-
-  List<Station> data;
+  BaseTab(this.data, this.myAppState);
 
   Widget _buildListItem(BuildContext context, int index) {
     return InkWell(
@@ -81,14 +77,34 @@ class BaseTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: RefreshIndicator(
-            onRefresh: _refreshStockPrices,
-            child: ListView.separated(
-              separatorBuilder: (context, index) => Divider(color: Colors.grey),
-              itemBuilder: _buildListItem,
-              itemCount: data.length,
-            )));
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+              child: RefreshIndicator(
+                  onRefresh: _refreshStockPrices,
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) =>
+                        Divider(color: Colors.grey),
+                    itemBuilder: _buildListItem,
+                    itemCount: data.length,
+                  ))),
+          Visibility(
+              visible: myAppState.isSearchVisible,
+              child: TextField(
+                onChanged: (text) {
+                  print("First text field: $text");
+                  myAppState.filterdata(text);
+                },
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(24),                    
+                    fillColor: ColorUtils.colorGray,
+                    filled: true,
+                    hintText: 'Please enter a search term',hintStyle: TextStyle(color: Colors.white30)),
+              ))
+        ]);
   }
 
   Future<Null> _refreshStockPrices() async {
@@ -101,11 +117,12 @@ class BaseTab extends StatelessWidget {
       case StatusType.ONLINE:
         return ColorUtils.colorActive;
       case StatusType.OFFLINE:
-        return Colors.grey;
+        return ColorUtils.colorOffline;
       case StatusType.SUBPOPULATED:
-        return Colors.blue;
+        return ColorUtils.colorUnderpopulated;
       case StatusType.SUPRAPOPULATED:
-        return Colors.red;
+        return ColorUtils.colorSuprapopulated;
     }
+    return ColorUtils.colorNotWorking;
   }
 }

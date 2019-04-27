@@ -25,72 +25,11 @@ class Info extends StatelessWidget {
                       style: TextStyle(
                           color: ColorUtils.colorPrimary, fontSize: 20),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                              backgroundColor: ColorUtils.colorActive,
-                              radius: 12.0),
-                        ),
-                        Text(
-                          "Active",
-                          style: TextStyle(fontSize: 23),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.grey, radius: 12.0),
-                        ),
-                        Text(
-                          "Offline",
-                          style: TextStyle(fontSize: 23),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.yellow, radius: 12.0),
-                        ),
-                        Text(
-                          "Not Working",
-                          style: TextStyle(fontSize: 23),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.red, radius: 12.0),
-                        ),
-                        Text(
-                          "Overpopulated",
-                          style: TextStyle(fontSize: 23),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.blue, radius: 12.0),
-                        ),
-                        Text(
-                          "Underpopulated",
-                          style: TextStyle(fontSize: 23),
-                        )
-                      ],
-                    ),
+                    colorInfo(ColorUtils.colorActive,"Active"),
+                    colorInfo(ColorUtils.colorOffline,"Offline"),
+                    colorInfo(ColorUtils.colorNotWorking,"Not Working"),
+                    colorInfo(ColorUtils.colorSuprapopulated,"Overpopulated"),
+                    colorInfo(ColorUtils.colorUnderpopulated,"Underpopulated"),
                     new Container(
                       padding: EdgeInsets.all(18),
                       height: 1,
@@ -148,5 +87,22 @@ class Info extends StatelessWidget {
                 ),
               )),
         ]));
+  }
+
+  Widget colorInfo(Color color,String info){
+    return Row(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(8.0),
+          child: CircleAvatar(
+              backgroundColor: color,
+              radius: 12.0),
+        ),
+        Text(
+          info,
+          style: TextStyle(fontSize: 23),
+        )
+      ],
+    );
   }
 }
