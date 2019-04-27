@@ -28,6 +28,7 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   bool loaded = false;
   Icon fabIcon = Icon(Icons.search, color: Colors.white);
   TabController _tabController;
+  int startUpTab = 2;
 
   final List<Tab> myTabs = <Tab>[
     Tab(text: "All"),
@@ -37,10 +38,17 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    getData();
     _tabController =
         new TabController(vsync: this, initialIndex: 0, length: myTabs.length);
     _tabController.addListener(_handleTabSelection);
+    LocalDb.getStartUpTab().then((tab) {
+      setState(() {
+        if (tab != _tabController.index) {
+          _tabController.animateTo(tab);
+        }
+      });
+    });
+    getData();
   }
 
   void getData() {
@@ -76,33 +84,10 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       home: DefaultTabController(
           length: 3,
           child: Scaffold(
-            appBar: AppBar(
-              textTheme: TextTheme(title: TextStyle(fontSize: 22)),
-              bottom: TabBar(
-                controller: _tabController,
-                labelStyle: TextStyle(fontSize: 18),
-                tabs: myTabs,
-              ),
-              title: Text('ClujBikeDart'),
-              actions: <Widget>[
-                PopupMenuButton(
-                  itemBuilder: (BuildContext context) {
-                    return <PopupMenuEntry>[
-                      new PopupMenuItem(
-                        child: InkWell(
-                          child: new Text("Info/Settings"),
-                          onTap: () => {
-                                Navigator.popAndPushNamed(
-                                    context, Info.routeName)
-                              },
-                        ),
-                      )
-                    ];
-                  },
-                ),
-              ],
+            body: NestedScrollView(
+              headerSliverBuilder: _buildAppBar,
+              body: _buildBody(),
             ),
-            body: _buildBody(),
             floatingActionButton:
                 Visibility(visible: isVisible, child: _buildFab()),
           )),
@@ -113,8 +98,37 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     );
   }
 
+  List<Widget> _buildAppBar(context, innerBoxIsScrolled) {
+    return <Widget>[
+      SliverAppBar(
+          textTheme: TextTheme(title: TextStyle(fontSize: 22)),
+          title: Text("ClujBikeDart"),
+          pinned: true,
+          floating: true,
+          forceElevated: innerBoxIsScrolled,
+          bottom: TabBar(
+            tabs: myTabs,
+            controller: _tabController,
+            labelStyle: TextStyle(fontSize: 18),
+          ),
+          actions: <Widget>[
+            PopupMenuButton(itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: InkWell(
+                    child: Text("Info/Settings"),
+                    onTap: () =>
+                        {Navigator.popAndPushNamed(context, Info.routeName)},
+                  ),
+                )
+              ];
+            })
+          ]),
+    ];
+  }
+
   Widget _buildFab() {
-    return new FancyFab((b) => {
+    return FancyFab((b) => {
           setState(() {
             isSearchVisible = b;
             if (uiData.length != data.length) {

@@ -11,13 +11,13 @@ class MappTab extends StatefulWidget {
   MappTab(this.data);
 
   @override
-  State<MappTab> createState() => MappTabState(data);
+  State<MappTab> createState() => _MappTabState(data);
 }
 
-class MappTabState extends State<MappTab>{
+class _MappTabState extends State<MappTab>{
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List<Station> data;
-  MappTabState(List<Station> _data) {
+  _MappTabState(List<Station> _data) {
     data =_data;
       
   }
