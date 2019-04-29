@@ -1,6 +1,6 @@
-import 'package:hello_flutter/model/station.dart';
-import 'package:hello_flutter/basetab.dart';
-import 'package:hello_flutter/home.dart';
+import 'package:clujbikedart/model/station.dart';
+import 'package:clujbikedart/basetab.dart';
+import 'package:clujbikedart/home.dart';
 
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_flutter/home.dart';
+import 'package:clujbikedart/home.dart';
 
 void main() => runApp(MyApp());
 

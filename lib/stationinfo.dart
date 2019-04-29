@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hello_flutter/model/station.dart';
+import 'package:clujbikedart/model/station.dart';
 import 'utils/colors.dart';
-import 'package:hello_flutter/utils/localdb.dart';
+import 'package:clujbikedart/utils/localdb.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StationInfo extends StatefulWidget {

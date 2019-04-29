@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_flutter/model/station.dart';
-import 'package:hello_flutter/utils/colors.dart';
-import 'package:hello_flutter/home.dart';
-import 'package:hello_flutter/stationinfo.dart';
+import 'package:clujbikedart/model/station.dart';
+import 'package:clujbikedart/utils/colors.dart';
+import 'package:clujbikedart/home.dart';
+import 'package:clujbikedart/stationinfo.dart';
 
 class BaseTab extends StatelessWidget {
   final HomePageState myAppState;

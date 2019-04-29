@@ -1,12 +1,12 @@
 import 'utils/colors.dart';
-import 'package:hello_flutter/alltab.dart';
-import 'package:hello_flutter/info.dart';
-import 'package:hello_flutter/stationinfo.dart';
-import 'package:hello_flutter/favoritesTab.dart';
-import 'package:hello_flutter/maptab.dart';
-import 'package:hello_flutter/model/station.dart';
-import 'package:hello_flutter/utils/localdb.dart';
-import 'package:hello_flutter/utils/fancyfab.dart';
+import 'package:clujbikedart/alltab.dart';
+import 'package:clujbikedart/info.dart';
+import 'package:clujbikedart/stationinfo.dart';
+import 'package:clujbikedart/favoritesTab.dart';
+import 'package:clujbikedart/maptab.dart';
+import 'package:clujbikedart/model/station.dart';
+import 'package:clujbikedart/utils/localdb.dart';
+import 'package:clujbikedart/utils/fancyfab.dart';
 import 'package:flutter/material.dart';
 
 

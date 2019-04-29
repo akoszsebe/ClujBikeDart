@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_flutter/utils/colors.dart';
+import 'package:clujbikedart/utils/colors.dart';
 
 class FancyFab extends StatefulWidget {
   final void Function(bool) listener;
