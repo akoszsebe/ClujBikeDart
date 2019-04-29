@@ -44,7 +44,7 @@ class StationInfoState extends State<StationInfo> {
                 icon: favoriteIcon,
                 onPressed: () {
                   setState(() {
-                    if (favoriteIcon.icon == Icons.star) {
+                    if (favoriteIcon.icon == Icons.favorite) {
                       favoriteIcon = Icon(Icons.favorite_border, size: 35);
                       LocalDb.removefavoriteId(station.id.toString());
                     } else {

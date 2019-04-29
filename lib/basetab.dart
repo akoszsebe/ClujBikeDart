@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hello_flutter/model/station.dart';
 import 'package:hello_flutter/utils/colors.dart';
-import 'package:hello_flutter/main.dart';
+import 'package:hello_flutter/home.dart';
 import 'package:hello_flutter/stationinfo.dart';
 
 class BaseTab extends StatelessWidget {
-  final MyAppState myAppState;
+  final HomePageState myAppState;
   final List<Station> data;
 
   BaseTab(this.data, this.myAppState);
