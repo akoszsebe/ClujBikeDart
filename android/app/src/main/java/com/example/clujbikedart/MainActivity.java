@@ -1,4 +1,4 @@
-package com.example.hello_flutter;
+package com.example.clujbikedart;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
