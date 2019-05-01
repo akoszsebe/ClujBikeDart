@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:clujbikedart/model/station.dart';
 import 'package:clujbikedart/utils/colors.dart';
-import 'package:clujbikedart/home.dart';
-import 'package:clujbikedart/stationinfo.dart';
+import 'package:clujbikedart/views/home.dart';
+import 'package:clujbikedart/views/stationinfo.dart';
 
 class BaseTab extends StatelessWidget {
   final HomePageState myAppState;
@@ -28,7 +28,7 @@ class BaseTab extends StatelessWidget {
                         padding: EdgeInsets.all(16.0),
                         child: CircleAvatar(
                             backgroundColor:
-                                colorSelector(data[index].statusType),
+                                _colorSelector(data[index].statusType),
                             radius: 13.0),
                       ),
                       Container(
@@ -89,21 +89,7 @@ class BaseTab extends StatelessWidget {
                         Divider(color: Colors.grey),
                     itemBuilder: _buildListItem,
                     itemCount: data.length,
-                  ))),
-          Visibility(
-              visible: myAppState.isSearchVisible,
-              child: TextField(
-                onChanged: (text) {
-                  print("First text field: $text");
-                  myAppState.filterdata(text);
-                },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(24),                    
-                    fillColor: ColorUtils.colorGray,
-                    filled: true,
-                    hintText: 'Please enter a search term',hintStyle: TextStyle(color: Colors.white30)),
-              ))
+                  )))
         ]);
   }
 
@@ -112,7 +98,7 @@ class BaseTab extends StatelessWidget {
     myAppState.getData();
   }
 
-  Color colorSelector(StatusType s) {
+  Color _colorSelector(StatusType s) {
     switch (s) {
       case StatusType.ONLINE:
         return ColorUtils.colorActive;

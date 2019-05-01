@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'utils/colors.dart';
+import 'package:clujbikedart/utils/colors.dart';
 import 'package:clujbikedart/utils/localdb.dart';
 
 class Info extends StatefulWidget {

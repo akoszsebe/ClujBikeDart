@@ -1,6 +1,6 @@
 import 'package:clujbikedart/model/station.dart';
-import 'package:clujbikedart/basetab.dart';
-import 'package:clujbikedart/home.dart';
+import 'package:clujbikedart/views/basetab.dart';
+import 'package:clujbikedart/views/home.dart';
 
 
 

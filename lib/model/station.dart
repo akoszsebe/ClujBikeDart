@@ -1,7 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
-
 class StationsData {
     List<Station> data;
     int total;
@@ -21,13 +17,6 @@ class StationsData {
         aggregateResults: json["AggregateResults"],
         errors: json["Errors"],
     );
-
-    Map<String, dynamic> toJson() => {
-        "Data": new List<dynamic>.from(data.map((x) => x.toJson())),
-        "Total": total,
-        "AggregateResults": aggregateResults,
-        "Errors": errors,
-    };
 }
 
 class Station {
@@ -82,24 +71,6 @@ class Station {
         notifies: new List<dynamic>.from(json["Notifies"].map((x) => x)),
         id: json["Id"],
     );
-
-    Map<String, dynamic> toJson() => {
-        "StationName": stationName,
-        "Address": address,
-        "OcuppiedSpots": ocuppiedSpots,
-        "EmptySpots": emptySpots,
-        "MaximumNumberOfBikes": maximumNumberOfBikes,
-        "LastSyncDate": lastSyncDate,
-        "IdStatus": idStatus,
-        "Status": statusValues.reverse[status],
-        "StatusType": statusTypeValues.reverse[statusType],
-        "Latitude": latitude,
-        "Longitude": longitude,
-        "IsValid": isValid,
-        "CustomIsValid": customIsValid,
-        "Notifies": new List<dynamic>.from(notifies.map((x) => x)),
-        "Id": id,
-    };
 }
 
 enum Status { FUNCTIONALA, DEFECTA }
@@ -133,16 +104,7 @@ class EnumValues<T> {
 }
 
 
-Future<List<Station>> createPost(String url) async {
-  return http.post(url).then((http.Response response) {
-    final int statusCode = response.statusCode;
- 
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while fetching data");
-    }
-    return StationsData.fromJson(json.decode(response.body)).data;
-  });
-}
+
 
 
 

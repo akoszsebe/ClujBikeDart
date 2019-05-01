@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clujbikedart/model/station.dart';
-import 'utils/colors.dart';
+import 'package:clujbikedart/utils/colors.dart';
 import 'package:clujbikedart/utils/localdb.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

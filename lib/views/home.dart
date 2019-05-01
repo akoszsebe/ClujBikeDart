@@ -1,19 +1,20 @@
-import 'utils/colors.dart';
-import 'package:clujbikedart/alltab.dart';
-import 'package:clujbikedart/info.dart';
-import 'package:clujbikedart/stationinfo.dart';
-import 'package:clujbikedart/favoritesTab.dart';
-import 'package:clujbikedart/maptab.dart';
+
+import 'package:clujbikedart/views/alltab.dart';
+import 'package:clujbikedart/views/info.dart';
+import 'package:clujbikedart/views/favoritesTab.dart';
+import 'package:clujbikedart/views/maptab.dart';
 import 'package:clujbikedart/model/station.dart';
 import 'package:clujbikedart/utils/localdb.dart';
 import 'package:clujbikedart/utils/fancyfab.dart';
 import 'package:flutter/material.dart';
+import 'package:clujbikedart/services/stations_services.dart';
+import 'package:clujbikedart/utils/colors.dart';
 
 
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return HomePageState();
+    return HomePageState(apiSvc: StationService());
   }
 }
 
@@ -28,6 +29,9 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   Icon fabIcon = Icon(Icons.search, color: Colors.white);
   TabController _tabController;
   int startUpTab = 2;
+  final IClujBikeApi apiSvc;
+
+  HomePageState({@required this.apiSvc});
 
   final List<Tab> myTabs = <Tab>[
     Tab(text: "All"),
@@ -51,8 +55,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   }
 
   void getData() {
-    isRefreshing = true;
-    createPost("http://portal.clujbike.eu/Station/Read").then((response) {
+    apiSvc.getSationsData().then((response) {
       LocalDb.getFavoriteIds().then((ids) {
         setState(() {
           favoriteIds = ids;
@@ -73,27 +76,14 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primaryColor: ColorUtils.colorPrimary,
-          primaryColorDark: ColorUtils.colorPrimaryDark,
-          accentColor: ColorUtils.colorAccent,
-          dividerColor: ColorUtils.colorDivider),
-      home: DefaultTabController(
-          length: 3,
-          child: Scaffold(
+    return 
+      Scaffold(
             body: NestedScrollView(
               headerSliverBuilder: _buildAppBar,
               body: _buildBody(),
             ),
             floatingActionButton:
                 Visibility(visible: isVisible, child: _buildFab()),
-          )),
-      routes: <String, WidgetBuilder>{
-        Info.routeName: (BuildContext context) => Info(),
-        StationInfo.routeName: (BuildContext context) => StationInfo(),
-      },
     );
   }
 
@@ -139,14 +129,34 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   Widget _buildBody() {
     if (loaded) {
-      return TabBarView(
+      return  Flex(
+        direction: Axis.vertical,
+        children: <Widget>[
+         Expanded(child:
+        TabBarView(
           physics: ScrollPhysics(),
           children: [
             AllTab(uiData, this),
             FavoritesTab(uiData, favoriteIds, this),
             MappTab(uiData),
           ],
-          controller: _tabController);
+          controller: _tabController)
+          )
+          ,Visibility(
+              visible: isSearchVisible,
+              child: TextField(
+                onChanged: (text) {
+                  filterdata(text);
+                },
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(24),                    
+                    fillColor: ColorUtils.colorGray,
+                    filled: true,
+                    hintText: 'Please enter a search term',hintStyle: TextStyle(color: Colors.white30)),
+              ))
+          ]
+          );
     } else {
       return new Center(
         child: CircularProgressIndicator(),
@@ -174,6 +184,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       }
       if (_tabController.index == 2) {
         isVisible = false;
+        isSearchVisible = false;
       } else {
         isVisible = true;
       }
