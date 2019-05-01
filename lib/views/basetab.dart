@@ -3,6 +3,7 @@ import 'package:clujbikedart/model/station.dart';
 import 'package:clujbikedart/utils/colors.dart';
 import 'package:clujbikedart/views/home.dart';
 import 'package:clujbikedart/views/stationinfo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BaseTab extends StatelessWidget {
   final HomePageState myAppState;
@@ -61,7 +62,12 @@ class BaseTab extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      Image.asset("assets/images/map_icon.png", width: 25),
+                      GestureDetector(
+                          onTap: () {
+                           _openMap(data[index].latitude,data[index].longitude);
+                          },
+                          child: Image.asset("assets/images/map_icon.png",
+                              width: 25)),
                       Text("Bikes " + data[index].ocuppiedSpots.toString(),
                           style: TextStyle(color: Colors.grey),
                           textScaleFactor: 1.1),
@@ -73,6 +79,15 @@ class BaseTab extends StatelessWidget {
                     ]),
               ),
             ]));
+  }
+
+  void _openMap(double lat,double lon) async {
+    String url = 'https://www.google.com/maps/search/?api=1&query=${lat},${lon}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
