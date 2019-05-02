@@ -12,9 +12,13 @@ import 'package:clujbikedart/utils/colors.dart';
 
 
 class HomePage extends StatefulWidget {
+  final IClujBikeApi apiSvc;
+
+  HomePage({@required this.apiSvc});
+
   @override
   State<StatefulWidget> createState() {
-    return HomePageState(apiSvc: StationService());
+    return HomePageState(apiSvc: apiSvc);
   }
 }
 
@@ -29,8 +33,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   Icon fabIcon = Icon(Icons.search, color: Colors.white);
   TabController _tabController;
   int startUpTab = 2;
+  
   final IClujBikeApi apiSvc;
-
   HomePageState({@required this.apiSvc});
 
   final List<Tab> myTabs = <Tab>[
