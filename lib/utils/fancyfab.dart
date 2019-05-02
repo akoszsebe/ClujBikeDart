@@ -9,7 +9,7 @@ class FancyFab extends StatefulWidget {
   @override
   _FancyFabState createState() => _FancyFabState(listener);
 
-  void clear(){
+  void clear() {
     createState().close();
   }
 }
@@ -22,25 +22,30 @@ class _FancyFabState extends State<FancyFab>
   final void Function(bool) listener;
 
   _FancyFabState(this.listener);
-
+  Animation<double> transfromation;
+  Animation<double> rotation;
+  Animation<double> animation;
   @override
   initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 100))
-          ..addStatusListener((status) {
-            setState(() {
-              if (isOpened) {
-                if (status == AnimationStatus.completed) {
-                  fabIcon = Icon(Icons.close, color: Colors.white);
-                }
-              } else {
-                if (status == AnimationStatus.dismissed) {
-                  fabIcon = Icon(Icons.search, color: Colors.white);
-                }
-              }
-            });
-          });
-
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    transfromation =
+        new Tween(begin: 0.0, end: 24.0).animate(_animationController);
+    rotation = new Tween(begin: 0.0, end: 1.6).animate(_animationController);
+    _animationController.addStatusListener((status) {
+      setState(() {
+        if (isOpened) {
+          if (status == AnimationStatus.completed) {
+            fabIcon = Icon(Icons.close, color: Colors.white);
+          }
+        } else {
+          if (status == AnimationStatus.dismissed) {
+            fabIcon = Icon(Icons.search, color: Colors.white);
+          }
+        }
+      });
+    });
+    _animationController.drive(CurveTween(curve: Curves.easeIn));
     super.initState();
   }
 
@@ -66,28 +71,25 @@ class _FancyFabState extends State<FancyFab>
     listener(isOpened);
   }
 
-  Widget toggle() {
-    return Transform.translate(
-        offset: Offset(0, -_animationController.value * 20),
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: _animationController,
         child: FloatingActionButton(
-          elevation: 0.0,
+          elevation: 1.0,
           backgroundColor: ColorUtils.colorPrimary,
           onPressed: animate,
           child: AnimatedBuilder(
             animation: _animationController,
             child: fabIcon,
             builder: (context, _widget) {
-              return Transform.rotate(
-                angle: _animationController.value * 1.6,
-                child: _widget,
-              );
+              return Transform.rotate(angle: rotation.value, child: _widget);
             },
           ),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return toggle();
+        ),
+        builder: (context, _widget) {
+          return Transform.translate(
+              offset: Offset(0, -transfromation.value), child: _widget);
+        });
   }
 }

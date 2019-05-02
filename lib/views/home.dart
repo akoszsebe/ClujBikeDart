@@ -1,4 +1,3 @@
-
 import 'package:clujbikedart/views/alltab.dart';
 import 'package:clujbikedart/views/info.dart';
 import 'package:clujbikedart/views/favoritesTab.dart';
@@ -8,8 +7,7 @@ import 'package:clujbikedart/utils/localdb.dart';
 import 'package:clujbikedart/utils/fancyfab.dart';
 import 'package:flutter/material.dart';
 import 'package:clujbikedart/services/stations_services.dart';
-import 'package:clujbikedart/utils/colors.dart';
-
+import 'package:clujbikedart/utils/filteritem.dart';
 
 class HomePage extends StatefulWidget {
   final IClujBikeApi apiSvc;
@@ -22,7 +20,8 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   List<Station> data = [];
   List<Station> uiData = [];
   List<String> favoriteIds = [];
@@ -33,7 +32,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   Icon fabIcon = Icon(Icons.search, color: Colors.white);
   TabController _tabController;
   int startUpTab = 2;
-  
+
   final IClujBikeApi apiSvc;
   HomePageState({@required this.apiSvc});
 
@@ -80,14 +79,12 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    return 
-      Scaffold(
-            body: NestedScrollView(
-              headerSliverBuilder: _buildAppBar,
-              body: _buildBody(),
-            ),
-            floatingActionButton:
-                Visibility(visible: isVisible, child: _buildFab()),
+    return Scaffold(
+      body: NestedScrollView(
+        headerSliverBuilder: _buildAppBar,
+        body: _buildBody(),
+      ),
+      floatingActionButton: Visibility(visible: isVisible, child: _buildFab()),
     );
   }
 
@@ -133,34 +130,24 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   Widget _buildBody() {
     if (loaded) {
-      return  Flex(
-        direction: Axis.vertical,
-        children: <Widget>[
-         Expanded(child:
-        TabBarView(
-          physics: ScrollPhysics(),
-          children: [
-            AllTab(uiData, this),
-            FavoritesTab(uiData, favoriteIds, this),
-            MappTab(uiData),
-          ],
-          controller: _tabController)
-          )
-          ,Visibility(
-              visible: isSearchVisible,
-              child: TextField(
-                onChanged: (text) {
-                  filterdata(text);
+      return Flex(direction: Axis.vertical, children: <Widget>[
+        Expanded(
+            child: TabBarView(
+                physics: ScrollPhysics(),
+                children: [
+                  AllTab(uiData, this),
+                  FavoritesTab(uiData, favoriteIds, this),
+                  MappTab(uiData),
+                ],
+                controller: _tabController)),
+        FilterItem(
+            listener: (b) => {
+                  setState(() {
+                    filterdata(b);
+                  })
                 },
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(24),                    
-                    fillColor: ColorUtils.colorGray,
-                    filled: true,
-                    hintText: 'Please enter a search term',hintStyle: TextStyle(color: Colors.white30)),
-              ))
-          ]
-          );
+            isSearchVisible: isSearchVisible)
+      ]);
     } else {
       return new Center(
         child: CircularProgressIndicator(),
