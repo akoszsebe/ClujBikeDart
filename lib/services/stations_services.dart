@@ -8,7 +8,7 @@ abstract class IClujBikeApi {
 }
 
 class StationService implements IClujBikeApi {
-  final _baseUrl = "http://portal.clujbike.eu";
+  final _baseUrl = "https://portal.clujbike.eu";
   final _stationsData = "/Station/Read";
 
   Future<List<Station>> getSationsData() async {
